@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bolivia Ucrónica: El Tamborilero de la Apocalipsis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       VARIABLES & RESET
+    ============================================================ */
+    :root {
+      --black:       #050505;
+      --deep:        #0a0a0a;
+      --asphalt:     #111118;
+      --fog:         #1a1a24;
+      --steel:       #2a2a38;
+      --dust:        #3d3d50;
+      --blood:       #8b0000;
+      --blood-bright:#c0392b;
+      --blood-neon:  #ff1a1a;
+      --toxic:       #39ff14;
+      --toxic-dim:   #1a7a0a;
+      --amber:       #ff8c00;
+      --amber-dim:   #7a4000;
+      --neon-yellow: #ffe600;
+      --slate:       #8892a4;
+      --mist:        #c0c8d8;
+      --white:       #f0f0f0;
+      --font-display:'Cinzel Decorative', serif;
+      --font-serif:  'Cinzel', serif;
+      --font-mono:   'Share Tech Mono', monospace;
+      --font-body:   'Crimson Pro', serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--mist);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    ::selection { background: var(--blood); color: var(--white); }
+
+    img { display: block; max-width: 100%; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--blood); }
+
+    /* ============================================================
+       READING PROGRESS BAR
+    ============================================================ */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      z-index: 9999;
+      background: linear-gradient(90deg, var(--toxic), var(--amber), var(--blood-neon));
+      transition: width 0.1s linear;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 3px; left: 0; right: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(180deg, rgba(5,5,5,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--blood-bright);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--slate);
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--blood-bright);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--blood-bright); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--blood-bright);
+      transition: all 0.3s;
+    }
+
+    /* ============================================================
+       NOISE TEXTURE OVERLAY
+    ============================================================ */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ============================================================
+       SCANLINES
+    ============================================================ */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+    }
+
+    /* ============================================================
+       SECTION BASE
+    ============================================================ */
+    section {
+      position: relative;
+      z-index: 10;
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+
+    /* ============================================================
+       GLITCH EFFECT
+    ============================================================ */
+    .glitch {
+      position: relative;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .glitch::before {
+      color: var(--blood-neon);
+      clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+      transform: translate(-3px, -2px);
+      animation: glitch-top 3.5s steps(1) infinite;
+      opacity: 0;
+    }
+
+    .glitch::after {
+      color: var(--toxic);
+      clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+      transform: translate(3px, 2px);
+      animation: glitch-bottom 3.5s steps(1) infinite;
+      opacity: 0;
+    }
+
+    @keyframes glitch-top {
+      0%,100%   { opacity: 0; transform: translate(0,0); }
+      5%        { opacity: 1; transform: translate(-4px,-2px); }
+      6%        { opacity: 0; }
+      15%       { opacity: 1; transform: translate(4px,1px); }
+      16%       { opacity: 0; }
+      60%       { opacity: 1; transform: translate(-2px,-3px); }
+      61%       { opacity: 0; }
+    }
+
+    @keyframes glitch-bottom {
+      0%,100%   { opacity: 0; transform: translate(0,0); }
+      7%        { opacity: 1; transform: translate(4px,2px); }
+      8%        { opacity: 0; }
+      20%       { opacity: 1; transform: translate(-4px,-1px); }
+      21%       { opacity: 0; }
+      65%       { opacity: 1; transform: translate(3px,3px); }
+      66%       { opacity: 0; }
+    }
+
+    /* Text glitch flicker */
+    .flicker {
+      animation: flicker-anim 4s steps(1) infinite;
+    }
+
+    @keyframes flicker-anim {
+      0%,100% { opacity:1; }
+      8%      { opacity:0.92; }
+      9%      { opacity:1; }
+      42%     { opacity:1; }
+      43%     { opacity:0.4; }
+      44%     { opacity:1; }
+      70%     { opacity:1; }
+      71%     { opacity:0.7; }
+      72%     { opacity:1; }
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+    .reveal-delay-4 { transition-delay: 0.6s; }
+
+    /* ============================================================
+       SECTION LABELS
+    ============================================================ */
+    .act-label {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border: 1px solid currentColor;
+      margin-bottom: 2rem;
+    }
+
+    .act-label.blood { color: var(--blood-bright); border-color: var(--blood-bright); }
+    .act-label.toxic { color: var(--toxic-dim); border-color: var(--toxic-dim); }
+    .act-label.amber { color: var(--amber); border-color: var(--amber); }
+    .act-label.slate { color: var(--slate); border-color: var(--slate); }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-lead {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--slate);
+      max-width: 680px;
+      font-style: italic;
+      margin-bottom: 3rem;
+    }
+
+    /* ============================================================
+       DECORATIVE DIVIDER
+    ============================================================ */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blood), transparent);
+      margin: 0;
+    }
+
+    .divider-toxic {
+      background: linear-gradient(90deg, transparent, var(--toxic-dim), transparent);
+    }
+
+    /* ============================================================
+       ██ HERO SECTION
+    ============================================================ */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    /* Animated background layers */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero-bg-gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 110%, rgba(139,0,0,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(57,255,20,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 20% 80%, rgba(10,10,10,0.8) 0%, transparent 80%);
+    }
+
+    /* Parallax mountain silhouette (CSS-drawn) */
+    .hero-mountains {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 55%;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(5,5,5,0.9) 80%);
+    }
+
+    .hero-mountains::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400'%3E%3Cpath d='M0,400 L0,300 L80,200 L160,270 L260,130 L380,220 L480,80 L600,200 L720,60 L840,180 L940,100 L1060,240 L1160,120 L1280,200 L1440,150 L1440,400 Z' fill='%230a0a12'/%3E%3Cpath d='M0,400 L0,360 L120,280 L200,330 L320,240 L440,310 L560,200 L680,280 L800,190 L920,270 L1040,200 L1160,290 L1280,230 L1440,270 L1440,400 Z' fill='%23070710'/%3E%3C/svg%3E") no-repeat bottom center / cover;
+    }
+
+    /* City grid lines effect */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(139,0,0,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,0,0,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center bottom, rgba(0,0,0,1) 0%, transparent 70%);
+      animation: grid-drift 20s linear infinite;
+    }
+
+    @keyframes grid-drift {
+      0%   { transform: perspective(600px) rotateX(30deg) translateY(0); }
+      100% { transform: perspective(600px) rotateX(30deg) translateY(60px); }
+    }
+
+    /* Video wrapper */
+    .hero-video-container {
+      position: relative;
+      z-index: 5;
+      width: min(680px, 90vw);
+      aspect-ratio: 16/9;
+      border: 1px solid rgba(139,0,0,0.5);
+      overflow: hidden;
+      margin-bottom: 3rem;
+      box-shadow:
+        0 0 0 1px rgba(139,0,0,0.3),
+        0 0 40px rgba(139,0,0,0.3),
+        inset 0 0 60px rgba(0,0,0,0.8);
+      background: #050510;
+      order: 3;
+    }
+
+    .hero-video-container video,
+    .hero-video-container iframe {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(5,5,15,0.4), rgba(139,0,0,0.1));
+      pointer-events: none;
+    }
+
+    .video-scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.15) 3px,
+        rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: radial-gradient(ellipse at center, #0f0f20 0%, #050505 100%);
+    }
+
+    .video-play-icon {
+      width: 64px; height: 64px;
+      border: 2px solid var(--blood-bright);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      animation: pulse-ring 2s ease-in-out infinite;
+    }
+
+    .video-play-icon::after {
+      content: '';
+      border-left: 20px solid var(--blood-bright);
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      margin-left: 5px;
+    }
+
+    .video-play-icon:hover {
+      background: rgba(139,0,0,0.3);
+      box-shadow: 0 0 30px rgba(139,0,0,0.6);
+    }
+
+    @keyframes pulse-ring {
+      0%,100% { box-shadow: 0 0 0 0 rgba(139,0,0,0.5); }
+      50%     { box-shadow: 0 0 0 12px rgba(139,0,0,0); }
+    }
+
+    .video-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: var(--blood-bright);
+      text-transform: uppercase;
+    }
+
+    /* Hero content */
+    .hero-content {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 6px;
+      color: var(--blood-bright);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fade-down 1s 0.5s forwards;
+    }
+
+    @keyframes fade-down {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 6.5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--white);
+      text-shadow:
+        0 0 80px rgba(139,0,0,0.5),
+        0 2px 0 rgba(0,0,0,0.8);
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fade-up 1.2s 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-title-sub {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--blood-bright);
+      text-shadow: 0 0 30px rgba(192,57,43,0.7);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fade-up 1.2s 1s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-quote {
+      font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+      font-style: italic;
+      color: var(--slate);
+      max-width: 640px;
+      line-height: 1.9;
+      margin-bottom: 2.5rem;
+      padding: 1.2rem 2rem;
+      border-left: 2px solid var(--blood);
+      text-align: left;
+      background: rgba(139,0,0,0.05);
+      opacity: 0;
+      animation: fade-up 1.2s 1.3s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.5rem;
+      background: transparent;
+      border: 1px solid var(--blood-bright);
+      color: var(--blood-bright);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s, box-shadow 0.3s;
+      opacity: 0;
+      animation: fade-up 1.2s 1.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--blood);
+      transform: translateX(-101%);
+      transition: transform 0.4s cubic-bezier(0.7,0,0.3,1);
+    }
+
+    .hero-cta:hover::before { transform: translateX(0); }
+    .hero-cta:hover {
+      color: var(--white);
+      box-shadow: 0 0 30px rgba(139,0,0,0.5);
+    }
+
+    .hero-cta span, .hero-cta svg { position: relative; z-index: 1; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fade-up 1s 2.5s both;
+    }
+
+    .scroll-hint-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(180deg, var(--blood-bright), transparent);
+      animation: scroll-line 2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-line {
+      0%,100% { transform: scaleY(1) translateY(0); opacity:1; }
+      50%     { transform: scaleY(0.5) translateY(10px); opacity:0.5; }
+    }
+
+    .scroll-hint-text {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 3px;
+      color: var(--blood);
+      writing-mode: vertical-rl;
+    }
+
+    /* ============================================================
+       ██ ACT I — ECO EN LAS RUINAS
+    ============================================================ */
+    #acto-1 {
+      background:
+        linear-gradient(180deg, var(--black) 0%, var(--asphalt) 50%, var(--black) 100%);
+      overflow: hidden;
+    }
+
+    #acto-1 .section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .act1-text { }
+
+    .tiwanaku-image-wrapper {
+      position: relative;
+      border: 1px solid rgba(139,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .tiwanaku-image-wrapper img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      filter: grayscale(60%) contrast(1.1) brightness(0.8);
+      transition: filter 0.6s;
+    }
+
+    .tiwanaku-image-wrapper:hover img {
+      filter: grayscale(20%) contrast(1.2) brightness(0.85);
+    }
+
+    .image-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1rem;
+      background: linear-gradient(0deg, rgba(5,5,5,0.95) 0%, transparent 100%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--blood-bright);
+      text-transform: uppercase;
+    }
+
+    .image-tint-red {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(139,0,0,0.15), transparent);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+
+    /* Visitor cards */
+    .visitor-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .visitor-card {
+      background: var(--fog);
+      border: 1px solid var(--steel);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .visitor-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+    }
+
+    .visitor-card.nacional::before { background: var(--blood-bright); }
+    .visitor-card.extranjero::before { background: var(--amber); }
+
+    .visitor-card:hover {
+      border-color: rgba(192,57,43,0.5);
+      transform: translateY(-4px);
+    }
+
+    .visitor-card-tag {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .visitor-card.nacional .visitor-card-tag { color: var(--blood-bright); }
+    .visitor-card.extranjero .visitor-card-tag { color: var(--amber); }
+
+    .visitor-card h4 {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+
+    .visitor-card p {
+      font-size: 0.85rem;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+
+    /* Tiwanaku symbol decoration */
+    .inca-symbol {
+      font-size: 3rem;
+      color: rgba(139,0,0,0.15);
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      line-height: 1;
+    }
+
+    /* ============================================================
+       ██ ACT II — PACIENTE CERO
+    ============================================================ */
+    #acto-2 {
+      background: var(--black);
+      position: relative;
+    }
+
+    /* Dark veins background */
+    #acto-2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='rgba(139%2C0%2C0%2C0.08)' stroke-width='1'%3E%3Cpath d='M400 0 Q420 200 380 400 Q360 600 400 800'/%3E%3Cpath d='M200 100 Q350 250 300 400 Q250 550 350 700'/%3E%3Cpath d='M600 100 Q450 250 500 400 Q550 550 450 700'/%3E%3Cpath d='M100 300 Q300 350 400 400 Q500 450 700 300'/%3E%3Cpath d='M0 500 Q200 480 400 500 Q600 520 800 500'/%3E%3C/g%3E%3C/svg%3E") no-repeat center / cover;
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    #acto-2 .section-inner { position: relative; z-index: 1; }
+
+    /* Infection visual */
+    .infection-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .infection-image {
+      width: min(500px, 90vw);
+      aspect-ratio: 4/3;
+      margin: 0 auto 3rem;
+      position: relative;
+      border: 1px solid rgba(139,0,0,0.4);
+      overflow: hidden;
+    }
+
+    .infection-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(80%) contrast(1.3) brightness(0.6);
+    }
+
+    .infection-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(139,0,0,0.6) 100%);
+      mix-blend-mode: multiply;
+    }
+
+    .glitch-label {
+      font-family: var(--font-mono);
+      font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+      color: var(--blood-neon);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255,26,26,0.8);
+      animation: flicker-anim 3s steps(1) infinite;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--blood), var(--blood-bright), var(--blood), transparent);
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0;
+      margin-bottom: 3rem;
+      align-items: start;
+    }
+
+    .timeline-item:nth-child(odd) .tl-content { grid-column: 1; text-align: right; padding-right: 40px; }
+    .timeline-item:nth-child(odd) .tl-empty   { grid-column: 3; }
+    .timeline-item:nth-child(even) .tl-content { grid-column: 3; padding-left: 40px; }
+    .timeline-item:nth-child(even) .tl-empty   { grid-column: 1; }
+
+    .tl-node {
+      grid-column: 2;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 0.5rem;
+    }
+
+    .tl-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--blood-bright);
+      border: 2px solid var(--blood-neon);
+      box-shadow: 0 0 15px rgba(255,26,26,0.6);
+      flex-shrink: 0;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 10px rgba(255,26,26,0.5); }
+      50%     { box-shadow: 0 0 25px rgba(255,26,26,0.9); }
+    }
+
+    .tl-content {
+      background: var(--fog);
+      border: 1px solid var(--steel);
+      padding: 1.5rem;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .tl-content:hover {
+      border-color: rgba(192,57,43,0.6);
+      box-shadow: 0 0 20px rgba(139,0,0,0.2);
+    }
+
+    .tl-phase {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: var(--blood-neon);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .tl-content h3 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .tl-content p {
+      font-size: 0.9rem;
+      color: var(--slate);
+      line-height: 1.65;
+    }
+
+    /* Infection stats grid */
+    .infection-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--blood);
+      border: 1px solid var(--blood);
+      margin-top: 5rem;
+      overflow: hidden;
+    }
+
+    .stat-block {
+      background: var(--asphalt);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    .stat-block:hover { background: var(--fog); }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--blood-bright);
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(192,57,43,0.5);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--slate);
+    }
+
+    /* ============================================================
+       ██ ACT III — ESCAPE A EL ALTO
+    ============================================================ */
+    #acto-3 {
+      background:
+        linear-gradient(180deg, var(--black) 0%, var(--asphalt) 30%, var(--black) 100%);
+    }
+
+    #acto-3 .section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .urban-image-stack {
+      position: relative;
+    }
+
+    .urban-img-main {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      filter: grayscale(70%) contrast(1.2) brightness(0.65);
+      border: 1px solid var(--steel);
+    }
+
+    .urban-img-overlay {
+      position: absolute;
+      bottom: -2rem; right: -2rem;
+      width: 55%;
+      height: 180px;
+      object-fit: cover;
+      filter: grayscale(50%) contrast(1.3) brightness(0.5);
+      border: 1px solid var(--blood);
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .urban-img-tint {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(17,17,24,0.3), rgba(139,0,0,0.1));
+      pointer-events: none;
+    }
+
+    /* Chaos cards */
+    .chaos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .chaos-card {
+      background: var(--fog);
+      border-left: 3px solid var(--blood-bright);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .chaos-card:hover {
+      background: var(--steel);
+      transform: translateX(4px);
+    }
+
+    .chaos-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      filter: grayscale(1) brightness(0.5);
+      font-style: normal;
+    }
+
+    .chaos-card h4 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blood-bright);
+      margin-bottom: 0.4rem;
+    }
+
+    .chaos-card p {
+      font-size: 0.85rem;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    /* Radio transmission */
+    .radio-box {
+      background: var(--asphalt);
+      border: 1px solid var(--steel);
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--toxic-dim);
+      margin-top: 2rem;
+      position: relative;
+    }
+
+    .radio-box::before {
+      content: '[ TRANSMISIÓN INTERCEPTADA — FRECUENCIA 89.4 FM ]';
+      position: absolute;
+      top: -0.6rem; left: 1rem;
+      background: var(--asphalt);
+      padding: 0 0.5rem;
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      color: var(--toxic-dim);
+    }
+
+    .radio-static {
+      animation: flicker-anim 2s steps(1) infinite;
+    }
+
+    /* ============================================================
+       ██ ACT IV — CAÍDA DEL TAMBORILERO
+    ============================================================ */
+    #acto-4 {
+      background: var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #acto-4::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 100% 60% at 50% 100%, rgba(139,0,0,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .climax-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 5rem;
+    }
+
+    .climax-narrative {
+      font-size: 1.05rem;
+      color: var(--slate);
+      line-height: 1.9;
+    }
+
+    .climax-narrative p { margin-bottom: 1.2rem; }
+
+    .climax-narrative strong {
+      color: var(--white);
+      font-style: italic;
+    }
+
+    .climax-narrative .highlight {
+      color: var(--blood-bright);
+      font-style: italic;
+    }
+
+    .drum-image-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drum-image {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      filter: grayscale(80%) contrast(1.4) brightness(0.4) sepia(30%);
+      border: 1px solid rgba(139,0,0,0.4);
+    }
+
+    .drum-image-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(139,0,0,0.5) 100%);
+    }
+
+    /* Symptom final grid */
+    .symptoms-section {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .symptoms-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .symptoms-sub {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: var(--blood-bright);
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+
+    .symptoms-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(139,0,0,0.3);
+      border: 1px solid rgba(139,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .symptom-item {
+      background: var(--deep);
+      padding: 2rem 1rem;
+      text-align: center;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .symptom-item::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 0;
+      background: rgba(139,0,0,0.2);
+      transition: height 0.4s;
+    }
+
+    .symptom-item:hover::before { height: 100%; }
+
+    .symptom-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      display: block;
+      filter: grayscale(1);
+      transition: filter 0.3s;
+    }
+
+    .symptom-item:hover .symptom-icon { filter: none; }
+
+    .symptom-name {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blood);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .symptom-desc {
+      font-size: 0.8rem;
+      color: var(--dust);
+      line-height: 1.4;
+    }
+
+    /* Final verse */
+    .final-verse {
+      max-width: 680px;
+      margin: 5rem auto 0;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(139,0,0,0.3);
+      border-bottom: 1px solid rgba(139,0,0,0.3);
+    }
+
+    .final-verse blockquote {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic;
+      color: var(--mist);
+      line-height: 2;
+      margin-bottom: 1.5rem;
+    }
+
+    .final-verse cite {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: var(--blood-bright);
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       ██ FOOTER
+    ============================================================ */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--steel);
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: var(--dust);
+      max-width: 280px;
+    }
+
+    .footer-symbol {
+      text-align: center;
+      font-size: 3rem;
+      color: rgba(139,0,0,0.4);
+      line-height: 1;
+    }
+
+    .footer-social {
+      text-align: right;
+    }
+
+    .footer-social h4 {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .social-link {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      color: var(--dust);
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .social-link:hover { color: var(--blood-bright); }
+
+    .social-link::after {
+      content: '→';
+      font-size: 0.8rem;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--steel);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--dust);
+    }
+
+    .footer-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--blood);
+    }
+
+    /* ============================================================
+       AMBIENT PARTICLES
+    ============================================================ */
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: var(--blood-bright);
+      border-radius: 50%;
+      animation: float-particle linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes float-particle {
+      0%   { opacity:0; transform: translateY(0) scale(1); }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { opacity:0; transform: translateY(-100vh) scale(0); }
+    }
+
+    /* ============================================================
+       LOADING SCREEN
+    ============================================================ */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      transition: opacity 0.8s, visibility 0.8s;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 5px;
+      color: var(--blood-bright);
+      text-transform: uppercase;
+      animation: flicker-anim 1.5s steps(1) infinite;
+    }
+
+    .loader-bar-wrap {
+      width: 240px;
+      height: 2px;
+      background: var(--steel);
+      overflow: hidden;
+    }
+
+    .loader-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blood), var(--blood-bright));
+      width: 0%;
+      transition: width 0.05s linear;
+      box-shadow: 0 0 8px var(--blood-bright);
+    }
+
+    .loader-pct {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--dust);
+      letter-spacing: 2px;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      #acto-1 .section-inner,
+      #acto-3 .section-inner,
+      .climax-layout,
+      .footer-top {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .footer-social { text-align: left; }
+      .social-links { align-items: flex-start; }
+      .footer-symbol { display: none; }
+
+      .visitor-cards { grid-template-columns: 1fr; }
+
+      .timeline::before { left: 20px; }
+
+      .timeline-item {
+        grid-template-columns: 40px 1fr;
+        gap: 0;
+      }
+
+      .timeline-item:nth-child(odd) .tl-content,
+      .timeline-item:nth-child(even) .tl-content {
+        grid-column: 2;
+        text-align: left;
+        padding-left: 1.5rem;
+        padding-right: 0;
+      }
+
+      .timeline-item:nth-child(odd) .tl-empty,
+      .timeline-item:nth-child(even) .tl-empty { display: none; }
+
+      .tl-node { grid-column: 1; padding-top: 0.6rem; }
+
+      .infection-stats { grid-template-columns: 1fr; }
+
+      .symptoms-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .urban-img-overlay { display: none; }
+
+      nav .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+    }
+
+    @media (max-width: 500px) {
+      .symptoms-grid { grid-template-columns: 1fr; }
+      .hero-quote { padding: 1rem 1rem; }
+    }
+
+    /* Mobile nav open */
+    nav.open .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: rgba(5,5,10,0.98);
+      border-top: 1px solid var(--blood);
+      padding: 1.5rem 2.5rem;
+      gap: 1.2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ============================================================
+       UTILITY
+    ============================================================ */
+    .text-blood   { color: var(--blood-bright); }
+    .text-toxic   { color: var(--toxic); }
+    .text-amber   { color: var(--amber); }
+    .text-slate   { color: var(--slate); }
+
+    .mt-lg { margin-top: 4rem; }
+
+    .full-bleed-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loader" role="status" aria-label="Cargando">
+    <div class="loader-title">Iniciando protocolo de emergencia...</div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar-fill" id="loader-fill"></div>
+    </div>
+    <div class="loader-pct" id="loader-pct">0%</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div id="progress-bar" role="progressbar" aria-label="Progreso de lectura"></div>
+
+  <!-- NOISE & SCANLINES -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- PARTICLES -->
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       NAV
+  ============================================================ -->
+  <nav id="main-nav" role="navigation" aria-label="Navegación principal">
+    <div class="nav-logo">BOL-UCR // 2087</div>
+    <ul class="nav-links">
+      <li><a href="#acto-1">Acto I</a></li>
+      <li><a href="#acto-2">Acto II</a></li>
+      <li><a href="#acto-3">Acto III</a></li>
+      <li><a href="#acto-4">Acto IV</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ============================================================
+       HERO SECTION
+  ============================================================ -->
+  <section id="hero" aria-label="Inicio">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-bg-gradient"></div>
+      <div class="hero-grid"></div>
+      <div class="hero-mountains"></div>
+    </div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">// Crónica de Horror Ucrónico — Bolivia, 2087</p>
+
+      <h1 class="hero-title glitch flicker" data-text="Bolivia Ucrónica">
+        Bolivia Ucrónica
+      </h1>
+      <h2 class="hero-title-sub glitch" data-text="El Tamborilero de la Apocalipsis">
+        El Tamborilero de la Apocalipsis
+      </h2>
+
+      <blockquote class="hero-quote">
+        "Al caer la noche, en medio de una avenida vacía de El Alto...<br>
+        ya no quedó nada humano dentro de él."
+      </blockquote>
+
+      <a href="#acto-1" class="hero-cta" aria-label="Comenzar la historia">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+        <span>Iniciar Travesía</span>
+      </a>
+    </div>
+
+    <!-- VIDEO CONTAINER -->
+    <div class="hero-video-container reveal reveal-delay-2">
+      <!-- Replace src with your video URL. Example uses a dark ambient loop placeholder. -->
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80"
+        aria-label="Video ambiental de Bolivia Ucrónica"
+      >
+        <!-- <source src="your-video-file.mp4" type="video/mp4"> -->
+        <!-- Fallback: mostramos el placeholder si no hay fuente -->
+      </video>
+
+      <!-- Placeholder visible cuando no hay video cargado -->
+      <div class="video-placeholder" id="video-ph">
+        <div class="video-play-icon" id="play-btn" role="button" tabindex="0" aria-label="Reproducir tráiler"></div>
+        <span class="video-label">// Tráiler — Bolivia Ucrónica 2087</span>
+        <img
+          src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=60"
+          alt="Circuitos y tecnología post-apocalíptica"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:-1;"
+        />
+      </div>
+
+      <div class="video-overlay"></div>
+      <div class="video-scanlines"></div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <div class="scroll-hint-line"></div>
+      <span class="scroll-hint-text">DESCENDER</span>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       ACT I — ECO EN LAS RUINAS ANCESTRALES
+  ============================================================ -->
+  <section id="acto-1" aria-label="Acto I: El Eco en las Ruinas Ancestrales">
+    <div class="section-inner">
+      <div class="act1-text">
+        <div class="act-label blood reveal">Acto I</div>
+        <h2 class="section-title reveal reveal-delay-1 glitch" data-text="El Eco en las Ruinas Ancestrales">
+          El Eco en las Ruinas Ancestrales
+        </h2>
+        <p class="section-lead reveal reveal-delay-2">
+          Tiwanaku. 3.800 metros sobre el nivel del mar. El viento aullaba sobre las piedras milenarias
+          como si los dioses del altiplano aún recordaran lo que fue olvidado.
+        </p>
+
+        <div class="climax-narrative reveal reveal-delay-3">
+          <p>
+            La Gran Festividad del Sol convocaba a miles cada año. Turistas con cámaras,
+            familias con wiphalas, chamanes con incienso. Nadie sospechaba que en el centro
+            de esa plaza sagrada, un hombre tocaba su tambor con una <strong>intensidad que no era humana</strong>.
+          </p>
+          <p>
+            Juancito Mamani llegó a Tiwanaku como tantos otros: con la tradición en las manos
+            y la pobreza en los zapatos. Pero esa noche, algo lo miró desde las piedras.
+            Y él le devolvió la mirada.
+          </p>
+        </div>
+
+        <!-- VISITOR CARDS -->
+        <div class="visitor-cards">
+          <div class="visitor-card nacional reveal reveal-delay-1">
+            <div class="visitor-card-tag">Visitante Nacional</div>
+            <h4>Comunidades Aymara</h4>
+            <p>Miles de familias que honran la Pachamama. Guardianes de una tradición de 3.000 años. Primeras víctimas.</p>
+            <span class="inca-symbol" aria-hidden="true">⊕</span>
+          </div>
+          <div class="visitor-card extranjero reveal reveal-delay-2">
+            <div class="visitor-card-tag">Visitante Extranjero</div>
+            <h4>Arqueólogos &amp; Turistas</h4>
+            <p>Investigadores europeos, mochileros japoneses. Vinieron a estudiar el pasado. Encontraron el futuro.</p>
+            <span class="inca-symbol" aria-hidden="true">✦</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGE -->
+      <div class="tiwanaku-image-wrapper reveal-right">
+        <img
+          src="https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=800&q=80"
+          alt="Ruinas ancestrales bajo un cielo grisáceo"
+          width="800" height="400"
+          loading="lazy"
+        />
+        <div class="image-tint-red" aria-hidden="true"></div>
+        <div class="image-caption">Tiwanaku — El Último Solsticio Normal // 2087.06.21</div>
+      </div>
+    </div>
+
+    <!-- FULL BLEED ATMOSPHERE IMAGE -->
+    <div class="reveal" style="overflow:hidden; margin-top:0;">
+      <img
+        src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=1400&q=70"
+        alt="Festividad andina bajo cielo oscuro"
+        class="full-bleed-img"
+        style="filter: grayscale(60%) contrast(1.2) brightness(0.5) sepia(15%);"
+        loading="lazy"
+      />
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       ACT II — PACIENTE CERO Y LA MUTACIÓN
+  ============================================================ -->
+  <section id="acto-2" aria-label="Acto II: El Paciente Cero y la Mutación">
+    <div class="section-inner">
+      <div class="infection-header">
+        <div class="act-label blood reveal">Acto II</div>
+
+        <div class="infection-image reveal">
+          <img
+            src="https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&q=80"
+            alt="Persona en sombras, inicio de la mutación"
+            width="800" height="400"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="glitch-label reveal">[ ALERTA BIOLÓGICA NIVEL 5 — PACIENTE ID: JM-0001 ]</div>
+
+        <h2 class="section-title reveal reveal-delay-1" style="text-align:center; margin-top:1.5rem;">
+          El Paciente Cero &amp; La Mutación
+        </h2>
+        <p class="section-lead reveal reveal-delay-2" style="margin:0 auto 3rem; text-align:center;">
+          El tambor empezó a sonar diferente. No era el ritmo. Era algo <em class="text-blood">debajo</em> del ritmo.
+          Un pulso que no venía de las manos. Venía de dentro.
+        </p>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="timeline" role="list">
+
+        <div class="timeline-item reveal">
+          <div class="tl-content" role="listitem">
+            <div class="tl-phase">Fase 01 — Hora 00:00</div>
+            <h3>El Colapso</h3>
+            <p>
+              Juancito cayó al suelo de la plaza. Las piedras de Tiwanaku vibraron.
+              Los chamanes lo rodearon, pero ninguno pudo acercarse más de tres metros.
+              El aire olía a cobre y tierra quemada.
+            </p>
+          </div>
+          <div class="tl-node"><div class="tl-dot"></div></div>
+          <div class="tl-empty"></div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-1">
+          <div class="tl-empty"></div>
+          <div class="tl-node"><div class="tl-dot"></div></div>
+          <div class="tl-content" role="listitem">
+            <div class="tl-phase">Fase 02 — Hora 02:17</div>
+            <h3>La Deformación</h3>
+            <p>
+              Sus venas se oscurecieron. Primero en las manos —las que tocaban el tambor—,
+              luego subiendo por los brazos como ríos de tinta. Abrió los ojos:
+              donde había blanco, ahora había nada.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="tl-content" role="listitem">
+            <div class="tl-phase">Fase 03 — Hora 04:48</div>
+            <h3>El Primer Ataque</h3>
+            <p>
+              El primer guardia se acercó. No hubo conversación. Juancito se incorporó
+              con una velocidad que la biología no permite. Lo que quedó del guardia
+              fue suficiente para que todos huyeran.
+            </p>
+          </div>
+          <div class="tl-node"><div class="tl-dot"></div></div>
+          <div class="tl-empty"></div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-1">
+          <div class="tl-empty"></div>
+          <div class="tl-node"><div class="tl-dot"></div></div>
+          <div class="tl-content" role="listitem">
+            <div class="tl-phase">Fase 04 — Hora 06:00</div>
+            <h3>La Propagación</h3>
+            <p>
+              El sol del solsticio no salió ese día. O quizás sí salió, y lo que vino
+              era capaz de oscurecerlo. En cuatro horas, treinta y siete personas
+              habían cambiado. El tambor seguía sonando.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STATS -->
+      <div class="infection-stats reveal">
+        <div class="stat-block">
+          <span class="stat-value flicker">37</span>
+          <span class="stat-label">Infectados — Hora 6</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-value flicker" style="animation-delay:0.5s">0</span>
+          <span class="stat-label">Supervivientes Confirmados</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-value flicker" style="animation-delay:1s">∞</span>
+          <span class="stat-label">Vector de Transmisión</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- INFECTION ATMOSPHERE -->
+    <div style="margin-top:0; overflow:hidden;">
+      <img
+        src="https://images.unsplash.com/photo-1476973422084-e0fa66ff9456?w=1400&q=70"
+        alt="Atmósfera oscura e infectada"
+        class="full-bleed-img"
+        style="filter: grayscale(80%) contrast(1.5) brightness(0.35) sepia(40%); height:200px; object-position: center 30%;"
+        loading="lazy"
+      />
+    </div>
+  </section>
+
+  <div class="divider divider-toxic" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       ACT III — ESCAPE A EL ALTO
+  ============================================================ -->
+  <section id="acto-3" aria-label="Acto III: Escape hacia la Urbe de Asfalto">
+    <div class="section-inner">
+
+      <!-- URBAN IMAGE -->
+      <div class="urban-image-stack reveal-left">
+        <img
+          src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80"
+          alt="Ciudad oscura, El Alto nocturno"
+          class="urban-img-main"
+          loading="lazy"
+        />
+        <div class="urban-img-tint" aria-hidden="true"></div>
+        <img
+          src="https://images.unsplash.com/photo-1503428593586-e225b39bddfe?w=400&q=60"
+          alt="Camión abandonado en la carretera"
+          class="urban-img-overlay"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- CHAOS CONTENT -->
+      <div class="reveal-right">
+        <div class="act-label amber">Acto III</div>
+        <h2 class="section-title">
+          Escape hacia la Urbe de Asfalto
+        </h2>
+        <p class="section-lead">
+          El Alto. 4.100 metros. Ciudad que nunca duerme porque no puede permitírselo.
+          Dos millones de personas. Ninguna salida que no pase por las rutas que él ya controla.
+        </p>
+
+        <!-- CHAOS CARDS -->
+        <div class="chaos-grid">
+          <div class="chaos-card reveal reveal-delay-1">
+            <em class="chaos-icon" aria-hidden="true">🚫</em>
+            <div>
+              <h4>Sin Suministros</h4>
+              <p>Las rutas de La Paz – El Alto colapsaron en hora 8. Supermercados vacíos en 45 minutos. El Estado tardó 6 horas en responder.</p>
+            </div>
+          </div>
+          <div class="chaos-card reveal reveal-delay-2">
+            <em class="chaos-icon" aria-hidden="true">⚠️</em>
+            <div>
+              <h4>Zonas de Conflicto</h4>
+              <p>Villa Dolores, Ciudad Satélite, Villa Adela. Las juntas vecinales montaron barricadas con lo que tenían. No fue suficiente.</p>
+            </div>
+          </div>
+          <div class="chaos-card reveal reveal-delay-3">
+            <em class="chaos-icon" aria-hidden="true">📡</em>
+            <div>
+              <h4>Colapso Institucional</h4>
+              <p>Las transmisiones gubernamentales cesaron a las 14:23. La última comunicación fue: <em>"No abran las puertas."</em> Nadie dijo por qué.</p>
+            </div>
+          </div>
+          <div class="chaos-card reveal reveal-delay-4">
+            <em class="chaos-icon" aria-hidden="true">🥁</em>
+            <div>
+              <h4>El Tambor Avanza</h4>
+              <p>Testigos relatan escuchar el redoble antes de verlo. Primero lejano, como trueno. Luego cercano, como corazón. Luego nada más.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RADIO BOX -->
+        <div class="radio-box reveal mt-lg">
+          <span class="radio-static">
+            &gt; 14:23:07 — ÚLTIMA TRANSMISIÓN OFICIAL<br>
+            &gt; "Ciudadanos... hemos perdido... contacto con... [ESTÁTICA]...<br>
+            &gt; ...unidades en Villa Adela reportan... [ESTÁTICA]...<br>
+            &gt; ...no abran las... [ESTÁTICA]... el tambor... [ESTÁTICA]...<br>
+            &gt; ████████████████████████████████████
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       ACT IV — CAÍDA DEL TAMBORILERO
+  ============================================================ -->
+  <section id="acto-4" aria-label="Acto IV: La Caída del Tamborilero">
+    <div class="section-inner">
+      <div class="act-label slate reveal">Acto IV — Desenlace</div>
+
+      <div class="climax-layout">
+        <!-- NARRATIVE -->
+        <div class="climax-narrative reveal-left">
+          <h2 class="section-title" style="margin-bottom:2rem;">
+            La Caída del Tamborilero
+          </h2>
+
+          <p>
+            Villa Adela. Medianoche. Las calles de asfalto helado reflejan los últimos
+            postes de luz que aún funcionan —parpadeando, siempre parpadeando—,
+            como si el barrio supiera que está mirando su <strong>propio funeral</strong>.
+          </p>
+
+          <p>
+            Juancito Mamani camina descalzo. El frío no existe para él ya.
+            El tambor cuelga de su espalda aunque nadie lo coloca. Suena solo.
+            Suena <span class="highlight">cada vez que su corazón debería latir</span>.
+          </p>
+
+          <p>
+            Los últimos sobrevivientes de Villa Adela —doce personas en un sótano—
+            cometieron el error de encender una linterna. La vieron pasar por la ventana
+            del sótano: una silueta que ya no tenía las proporciones correctas.
+          </p>
+
+          <p>
+            No corrió. No necesitó hacerlo. Simplemente <strong>tocó el tambor</strong>.
+            Y una por una, sin que pudieran entender por qué, las doce personas
+            abrieron la puerta desde adentro.
+          </p>
+
+          <p>
+            La última en abrir dijo una sola frase, que fue grabada en un teléfono
+            que seguía transmitiendo:
+          </p>
+
+          <blockquote style="border-left: 2px solid var(--blood); padding-left: 1.2rem; margin: 1.5rem 0; color: var(--mist); font-style: italic; font-size: 1.1rem;">
+            "Tiene razón. Esto es mejor que tener miedo."
+          </blockquote>
+
+          <p style="color: var(--dust);">
+            El teléfono siguió grabando otros cuarenta y tres minutos.
+            No hubo más voces humanas en la grabación.
+            Sólo el tambor.
+          </p>
+        </div>
+
+        <!-- DRUM IMAGE -->
+        <div class="drum-image-container reveal-right">
+          <img
+            src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=700&q=70"
+            alt="Tambor abandonado en el asfalto de El Alto"
+            class="drum-image"
+            loading="lazy"
+          />
+          <div class="drum-image-glow" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- SYMPTOMS -->
+      <div class="symptoms-section">
+        <h3 class="symptoms-title reveal">Síntomas Finales</h3>
+        <p class="symptoms-sub reveal reveal-delay-1">Protocolo de documentación — Minuto 00 al Colapso Total</p>
+
+        <div class="symptoms-grid reveal reveal-delay-2">
+          <div class="symptom-item">
+            <span class="symptom-icon" aria-hidden="true">🩸</span>
+            <span class="symptom-name">Oscurecimiento Vascular</span>
+            <p class="symptom-desc">Venas visibles como raíces de tinta bajo la piel pálida</p>
+          </div>
+          <div class="symptom-item">
+            <span class="symptom-icon" aria-hidden="true">👁️</span>
+            <span class="symptom-name">Pérdida de Esclerótica</span>
+            <p class="symptom-desc">Ojos completamente negros. Sin iris. Sin límite</p>
+          </div>
+          <div class="symptom-item">
+            <span class="symptom-icon" aria-hidden="true">🦴</span>
+            <span class="symptom-name">Deformación Ósea</span>
+            <p class="symptom-desc">Extremidades que doblan en ángulos que no existen en la anatomía</p>
+          </div>
+          <div class="symptom-item">
+            <span class="symptom-icon" aria-hidden="true">🔇</span>
+            <span class="symptom-name">Silencio Interior</span>
+            <p class="symptom-desc">Ningún infectado reporta dolor. Ninguno reporta nada.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL VERSE -->
+      <div class="final-verse reveal">
+        <blockquote>
+          "No fue un virus. No fue una maldición.<br>
+          Fue el altiplano recordando<br>
+          que siempre ha habido dioses aquí,<br>
+          y que nosotros somos sus instrumentos."
+        </blockquote>
+        <cite>— Fragmento recuperado. Autor desconocido. El Alto, 2087.</cite>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <h3>Bolivia Ucrónica</h3>
+          <p>Una obra de horror post-apocalíptico y ciencia ficción andina. Todos los personajes y eventos son ficticios.</p>
+        </div>
+
+        <div class="footer-symbol" aria-hidden="true">⊕</div>
+
+        <div class="footer-social">
+          <h4>Transmisiones ficticias</h4>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Canal de YouTube ficticio">@BoliviaUcronica</a>
+            <a href="#" class="social-link" aria-label="Twitter ficticio">@Tamborilero2087</a>
+            <a href="#" class="social-link" aria-label="Instagram ficticio">@EcoDeTiwanaku</a>
+            <a href="#" class="social-link" aria-label="Archivo ficticio">Archive.Bol // 2087</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2087 CODE M4STER — Universidad Privada Franz Tamayo. Obra de ficción.</p>
+        <p class="footer-tag">// EL TAMBOR NUNCA PARA //</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    "use strict";
+
+    /* ── LOADER ──────────────────────────────────────────────── */
+    (function() {
+      const fill = document.getElementById('loader-fill');
+      const pct  = document.getElementById('loader-pct');
+      const loader = document.getElementById('loader');
+      let v = 0;
+
+      const msgs = [
+        'Inicializando protocolo de emergencia...',
+        'Escaneando zona de cuarentena...',
+        'Cargando registros de El Alto...',
+        'Conectando con la frecuencia 89.4...',
+        'Acceso concedido.'
+      ];
+
+      const titleEl = loader.querySelector('.loader-title');
+      let msgIdx = 0;
+
+      const step = () => {
+        v += Math.random() * 6 + 2;
+        if (v >= 100) v = 100;
+        fill.style.width = v + '%';
+        pct.textContent = Math.round(v) + '%';
+
+        if (v < 100) {
+          if (v > msgIdx * 20 && msgIdx < msgs.length) {
+            titleEl.textContent = msgs[msgIdx++];
+          }
+          setTimeout(step, 60 + Math.random() * 80);
+        } else {
+          titleEl.textContent = msgs[msgs.length - 1];
+          setTimeout(() => {
+            loader.classList.add('hidden');
+          }, 600);
+        }
+      };
+      step();
+    })();
+
+    /* ── PROGRESS BAR ────────────────────────────────────────── */
+    (function() {
+      const bar = document.getElementById('progress-bar');
+
+      window.addEventListener('scroll', () => {
+        const total  = document.body.scrollHeight - window.innerHeight;
+        const current = window.scrollY;
+        const pct    = total > 0 ? (current / total) * 100 : 0;
+        bar.style.width = pct + '%';
+
+        // Color shifts from toxic → amber → blood as you scroll
+        if (pct < 33)       bar.style.background = `linear-gradient(90deg, #39ff14, #ffe600)`;
+        else if (pct < 66)  bar.style.background = `linear-gradient(90deg, #ffe600, #ff8c00)`;
+        else                bar.style.background = `linear-gradient(90deg, #ff8c00, #ff1a1a)`;
+      }, { passive: true });
+    })();
+
+    /* ── SCROLL REVEAL ───────────────────────────────────────── */
+    (function() {
+      const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+      revealEls.forEach(el => observer.observe(el));
+    })();
+
+    /* ── NAV MOBILE TOGGLE ───────────────────────────────────── */
+    (function() {
+      const toggle = document.getElementById('nav-toggle');
+      const nav    = document.getElementById('main-nav');
+
+      toggle.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+
+      // Close on link click
+      nav.querySelectorAll('.nav-links a').forEach(a => {
+        a.addEventListener('click', () => {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        });
+      });
+    })();
+
+    /* ── VIDEO PLACEHOLDER ───────────────────────────────────── */
+    (function() {
+      const ph  = document.getElementById('video-ph');
+      const btn = document.getElementById('play-btn');
+      const video = document.querySelector('#hero video');
+
+      // If video has no src, show placeholder
+      const hasSrc = video && (video.src || video.querySelector('source'));
+      if (!hasSrc && ph) {
+        ph.style.display = 'flex';
+        if (video) video.style.display = 'none';
+      } else if (ph) {
+        ph.style.display = 'none';
+      }
+
+      if (btn) {
+        btn.addEventListener('click', () => {
+          // Here you could open a modal with a YouTube embed
+          // For now, we show an alert as placeholder
+          alert('🎬 Aquí iría el tráiler de Bolivia Ucrónica.\nReemplaza el <source> dentro del <video> con tu archivo de video.');
+        });
+        btn.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') btn.click();
+        });
+      }
+    })();
+
+    /* ── AMBIENT PARTICLES ───────────────────────────────────── */
+    (function() {
+      const container = document.getElementById('particles');
+      if (!container) return;
+
+      const PARTICLE_COUNT = 25;
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+
+        const x    = Math.random() * 100;
+        const dur  = 12 + Math.random() * 20;
+        const del  = Math.random() * 15;
+        const size = Math.random() < 0.3 ? 2 : 1;
+        const hue  = Math.random() < 0.6 ? '#8b0000' : '#39ff14';
+
+        p.style.cssText = `
+          left: ${x}vw;
+          bottom: -5px;
+          width: ${size}px;
+          height: ${size}px;
+          background: ${hue};
+          animation-duration: ${dur}s;
+          animation-delay: ${del}s;
+        `;
+
+        container.appendChild(p);
+      }
+    })();
+
+    /* ── GLITCH INTERVAL RANDOMIZER ──────────────────────────── */
+    (function() {
+      const glitchEls = document.querySelectorAll('.glitch');
+
+      glitchEls.forEach(el => {
+        // Randomly pause/resume animation to feel organic
+        setInterval(() => {
+          if (Math.random() < 0.3) {
+            el.style.animation = 'none';
+            setTimeout(() => {
+              el.style.animation = '';
+            }, 100 + Math.random() * 200);
+          }
+        }, 4000 + Math.random() * 3000);
+      });
+    })();
+
+    /* ── NAV SCROLL SHADOW ───────────────────────────────────── */
+    (function() {
+      const nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+          nav.style.background = 'rgba(5,5,10,0.96)';
+          nav.style.borderBottom = '1px solid rgba(139,0,0,0.3)';
+        } else {
+          nav.style.background = '';
+          nav.style.borderBottom = '';
+        }
+      }, { passive: true });
+    })();
+
+    /* ── CURSOR EFFECT ───────────────────────────────────────── */
+    (function() {
+      // Subtle blood-red cursor trail on desktop
+      if (window.matchMedia('(hover: hover)').matches) {
+        const trail = document.createElement('div');
+        trail.style.cssText = `
+          position:fixed; width:8px; height:8px; border-radius:50%;
+          background:rgba(139,0,0,0.5); pointer-events:none; z-index:9999;
+          transform:translate(-50%,-50%); transition:left 0.1s, top 0.1s;
+          mix-blend-mode:difference;
+        `;
+        document.body.appendChild(trail);
+
+        let tx = -50, ty = -50;
+        document.addEventListener('mousemove', e => {
+          tx = e.clientX;
+          ty = e.clientY;
+          trail.style.left = tx + 'px';
+          trail.style.top  = ty + 'px';
+        }, { passive: true });
+      }
+    })();
+  </script>
+
+</body>
+</html>
